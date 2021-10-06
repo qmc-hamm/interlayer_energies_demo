@@ -16,7 +16,6 @@ def eval_energy(df, sigma, epsilon):
         energy.append(atoms.get_potential_energy()/len(atoms))
 
     lj_en =  np.asarray(energy)- np.min(energy) + np.min(df['energy'])
-    print("energy", lj_en, df['energy'])
     return lj_en
         
 
@@ -24,7 +23,6 @@ def eval_energy(df, sigma, epsilon):
 def fit_lj(df, sigma0, epsilon0):
     ydata = df['energy']
     popt, pcov = scipy.optimize.curve_fit(eval_energy, df, ydata, p0=(sigma0, epsilon0))
-    print("optimized", popt)
     return popt
     
     
