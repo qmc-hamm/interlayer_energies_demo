@@ -1,6 +1,6 @@
 import ase
 import ase.calculators.lj
-import generate_geometry
+from interlayer_energies_demo import generate_geometry
 import scipy.optimize
 import numpy as np
 
