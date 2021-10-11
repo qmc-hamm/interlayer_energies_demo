@@ -74,30 +74,15 @@ def eval_energy(df, z0, C0, C2, C4, C, delta, lamda, A):
 
 def fit_kc(df, p0):
     ydata = df['energy']
-    popt, pcov = scipy.optimize.curve_fit(eval_energy, df, ydata, p0=p0, method='trf')
+    popt, pcov = scipy.optimize.curve_fit(eval_energy, df, ydata, p0=p0, method='trf', gtol=1e-06)
     print(popt)
     return popt
 
-# z0_0, C0_0, C2_0, C4_0, C_0, delta_0, lamda_0, A_0
-# df = load.load_data()
-# eval_energy(df, 3.416084, 20.021583, 10.9055107, 4.2756354, 1.0010836E-2, 0.8447122, 2.9360584, 14.3132588)
-
-def main():
-    import load
+def run_fit():
     df = load.load_data()
     p0 = (3.416084, 20.021583, 10.9055107, 4.2756354, 1.0010836E-2, 0.8447122, 2.9360584, 14.3132588)
     popt = fit_kc(df, p0)
     print(popt)
-    return
-    # df['en'] = eval_energy(df, *popt)
-    # import matplotlib.pyplot as plt
-    # import seaborn as sns
-    # g = sns.FacetGrid(hue='disregistry', col='disregistry',data =df)
-    # g.map( plt.plot,'d','en')
-    # g.map( plt.errorbar,'d','energy', 'energy_err', marker='o', mew=1, mec='k', linestyle="")
-    # print(df)
-    # g.add_legend()
-    # plt.show()
 
 if __name__ == '__main__':
-    main()
+    run_fit()
