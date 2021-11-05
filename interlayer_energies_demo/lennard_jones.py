@@ -20,7 +20,7 @@ def eval_energy(df, sigma, epsilon):
         
 
 
-def fit_lj(df, sigma0, epsilon0):
+def fit_lj(df, sigma0=3.5, epsilon0=3e-2):
     ydata = df['energy']
     popt, pcov = scipy.optimize.curve_fit(eval_energy, df, ydata, p0=(sigma0, epsilon0))
     return popt
@@ -31,11 +31,19 @@ def fit_lj(df, sigma0, epsilon0):
 if __name__=="__main__":
     import load
     df = load.load_data()
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    g = sns.FacetGrid(hue='disregistry', data =df, height=3)
+    g.map(plt.errorbar,'d', 'energy', 'energy_err', marker='o', mew=1, mec='k')
+    g.add_legend()
+    plt.xlabel("Interlayer distance (Angstroms)")
+    plt.ylabel("Energy (eV/atom)")
+    plt.savefig("qmc_data.pdf", bbox_inches='tight')
+
     sigma, epsilon = fit_lj(df, sigma0=3.5, epsilon0=3e-2)
 
     df['lj_en'] = eval_energy(df, sigma=sigma, epsilon=epsilon)
-    import matplotlib.pyplot as plt
-    import seaborn as sns
     g = sns.FacetGrid(hue='disregistry', col='disregistry',data =df)
     g.map( plt.plot,'d','lj_en')
     g.map( plt.errorbar,'d','energy', 'energy_err', marker='o', mew=1, mec='k', linestyle="")
