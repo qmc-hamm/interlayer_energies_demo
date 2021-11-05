@@ -1,6 +1,5 @@
 import ase
 import numpy as np
-
 def get_basis(a, d, c, disregistry, zshift='CM'):
 
     '''
@@ -37,15 +36,11 @@ def get_lattice_vectors(a, c):
 def create_graphene_geom(d,disregistry, a=2.462,c=15, zshift='CM'):
     """ 
     All units should be in angstroms"""
-    symbols = ['C']*4
-    # symbols = ['C1', 'C1', 'C2', 'C2']
-    return ase.Atoms(
-        symbols=symbols,
-        positions=get_basis(a, d, c, disregistry, zshift=zshift),
-        cell=get_lattice_vectors(a, c),
-        pbc=[1, 1, 1],
-        # masses=[12, 12, 12, 12]
-        )
+    return ase.Atoms(symbols=['C']*4, positions=get_basis(a,d,c,disregistry, zshift=zshift),
+                    cell = get_lattice_vectors(a,c), 
+                    pbc=[1,1,1])
+
+
 
 if __name__=="__main__":
     import ase.io
