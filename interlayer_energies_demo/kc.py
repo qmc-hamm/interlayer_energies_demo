@@ -6,7 +6,43 @@ import numpy as np
 import os
 
 from ase.calculators.lammpsrun import LAMMPS
+from ase.calculators.lammpslib import LAMMPSlib
 import load
+
+
+def eval_energy_lib(df, z0, C0, C2, C4, C, delta, lamda, A):
+    """
+    """
+
+    print(df)
+    energy = []
+    for it, row in df.iterrows():
+        print(row)
+        atoms = generate_geometry.create_graphene_geom(row['d'], row['disregistry'])
+        cmds = [
+            # "pair_style hybrid/overlay rebo kolmogorov/crespi/full 16.0 1",
+            "pair_style rebo",
+            "pair_coeff       * *   rebo    CH.rebo        C C",
+            # "pair_coeff       * *   kolmogorov/crespi/full   CH_taper.KC   C C"
+            ]
+        lammps = LAMMPSlib(lmpcmds=cmds, log_file='test.log',
+                    # lammps_header=['units metal',
+                    #    'atom_style full',
+                    #    'atom_modify map array sort 0 0'],
+                    keep_tmp_files=True,
+                    verbose = True,
+                    tmp_dir='tmp/',
+                    no_data_file = True
+                       )
+        atoms.calc = lammps
+        print('*'*50)
+        print(atoms.get_potential_energy()/len(atoms))
+        print('after')
+        # energy.append(atoms.get_potential_energy()/len(atoms))
+
+    lj_en =  np.asarray(energy) - np.min(energy) + np.min(df['energy'])
+    print(lj_en)
+    return lj_en
 
 def eval_energy(df, z0, C0, C2, C4, C, delta, lamda, A):
     """
